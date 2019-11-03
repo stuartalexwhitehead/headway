@@ -9,6 +9,8 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
+ADDITIONAL_INSTALLED_APPS = env.list('INSTALLED_APPS', default=[])
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,8 +26,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'rest_social_auth',
-]
 
+    'headway',
+] + ADDITIONAL_INSTALLED_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -41,6 +44,8 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+AUTH_USER_MODEL = 'headway.User'
 
 ROOT_URLCONF = 'headway.urls'
 
