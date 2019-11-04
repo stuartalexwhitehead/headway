@@ -28,7 +28,6 @@ else
             docker run --rm --workdir / --volume $(pwd)/core:/core headway-core black ${CORE_FILES}
             git add $CORE_FILES
             docker run --rm --workdir / --volume $(pwd)/core:/core headway-core flake8 ${CORE_FILES}
-            exit 2
         else
             printf "\`docker\` is missing. Please install Docker to enable Python linting."
             exit 1
