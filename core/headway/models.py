@@ -39,11 +39,14 @@ class Profile(UUIDModel):
     receptiveness = models.CharField(
         choices=RECEPTIVENESS_CHOICES, default=INDIFFERENT, max_length=11
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
+    )
 
 
 class Feedback(UUIDModel, TrackedModel):
     is_read = models.BooleanField(default=False)
+    is_anonymous = models.BooleanField(default=False)
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -53,7 +56,6 @@ class Feedback(UUIDModel, TrackedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=True,
-        blank=True,
         related_name="sent_feedback",
     )
     feedback_request = models.ForeignKey(
@@ -68,6 +70,9 @@ class FeedbackComment(UUIDModel, TrackedModel):
     is_read = models.BooleanField(default=False)
     message = models.TextField()
     feedback = models.ForeignKey("Feedback", on_delete=models.CASCADE)
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
+    )
 
 
 class FeedbackRequest(UUIDModel, TrackedModel):
@@ -87,12 +92,12 @@ class FeedbackRequest(UUIDModel, TrackedModel):
     type = models.CharField(choices=REQUEST_TYPE_CHOICES, max_length=9)
     status = models.CharField(choices=STATUS_CHOICES, default=ACTIVE, max_length=9)
     reason = models.TextField()
-    requester = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+    recipients = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="received_feedback_requests"
     )
-
-    def clean(self):
-        if self.type == self.MANUAL and self.requester is None:
-            raise ValidationError(
-                {"requester": 'Field is required when type is "{}"'.format(self.MANUAL)}
-            )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="sent_feedback_requests",
+    )
