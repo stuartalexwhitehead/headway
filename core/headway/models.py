@@ -42,6 +42,7 @@ class Profile(UUIDModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
     )
+    harvest_id = models.CharField(max_length=10, null=True, default=None)
 
 
 class Feedback(UUIDModel, TrackedModel):
