@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'social_django',
     'rest_social_auth',
 
+    # see https://huey.readthedocs.io/en/latest/django.html#django
+    'huey.contrib.djhuey',
+
     'headway',
 ] + ADDITIONAL_INSTALLED_APPS
 

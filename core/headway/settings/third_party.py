@@ -12,6 +12,27 @@ REST_FRAMEWORK = {
     ]
 }
 
+HUEY = {
+    'immediate': env.bool('HUEY_IMMEDIATE'),
+    'connection': {
+        'url': env.str('HUEY_REDIS_URL'),
+    },
+    'consumer': {
+        'workers': 2,
+    },
+}
+
+SHELL_PLUS_PRE_IMPORTS = [
+    ('headway.harvest', '*'),
+    ('headway.tasks', '*'),
+]
+
+HARVEST_BASE_URL = "https://api.harvestapp.com"
+FORECAST_BASE_URL = "https://api.forecastapp.com"
+HARVEST_ACCESS_TOKEN = env.str('HARVEST_ACCESS_TOKEN')
+HARVEST_ACCOUNT_ID = env.str('HARVEST_ACCOUNT_ID')
+FORECAST_ACCOUNT_ID = env.str('FORECAST_ACCOUNT_ID')
+
 # see https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
