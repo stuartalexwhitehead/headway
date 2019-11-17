@@ -12,7 +12,6 @@ class GetHarvestIdForUserTestCase(TestCase):
         User = get_user_model()
 
         cls.user = User.objects.create(email="a@headway.com")
-        cls.profile = Profile.objects.create(user=cls.user)
 
     def test_user_not_exist(self):
         task = get_harvest_id_for_user('7e546c57-91f3-4aa6-93d2-078f0e591517')
@@ -34,8 +33,8 @@ class GetHarvestIdForUserTestCase(TestCase):
             task = get_harvest_id_for_user(self.user.id)
             result = task()
 
-            self.profile.refresh_from_db()
+            self.user.refresh_from_db()
 
             self.assertIsNotNone(result)
             self.assertEqual(result, ret["id"])
-            self.assertEqual(self.profile.harvest_id, str(ret["id"]))
+            self.assertEqual(self.user.profile.harvest_id, str(ret["id"]))

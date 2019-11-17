@@ -21,7 +21,6 @@ class ProfileTestCase(TestCase):
         User = get_user_model()
 
         cls.user = User.objects.create()
-        cls.profile = Profile.objects.create(user=cls.user)
         cls.factory = APIRequestFactory()
 
     def test_get_own_profile(self):
