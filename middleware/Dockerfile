@@ -1,15 +1,15 @@
 ARG NODE_VERSION=latest
 ARG PORT=3001
 ARG APPLICATION_PATH=/app
-ARG DEPENDENCY_PATH=/dependencies
 
 # prod dependencies
 # --------------------------------------------------
 FROM node:${NODE_VERSION} AS dependencies-prod
-ARG DEPENDENCY_PATH
+ARG APPLICATION_PATH
 
-WORKDIR $DEPENDENCY_PATH
+WORKDIR $APPLICATION_PATH
 
+ADD ./yarn.lock ./yarn.lock
 ADD ./package.json ./package.json
 
 RUN yarn install --production
@@ -17,12 +17,13 @@ RUN yarn install --production
 # dev dependencies
 # --------------------------------------------------
 FROM node:${NODE_VERSION} AS dependencies-dev
-ARG DEPENDENCY_PATH
+ARG APPLICATION_PATH
 
-WORKDIR $DEPENDENCY_PATH
+WORKDIR $APPLICATION_PATH
 
-COPY --from=dependencies-prod $DEPENDENCY_PATH/node_modules $DEPENDENCY_PATH/node_modules
+COPY --from=dependencies-prod $APPLICATION_PATH/node_modules $APPLICATION_PATH/node_modules
 
+ADD ./yarn.lock ./yarn.lock
 ADD ./package.json ./package.json
 
 RUN yarn install
