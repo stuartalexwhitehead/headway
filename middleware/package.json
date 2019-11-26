@@ -1,7 +1,32 @@
 {
-  "name": "headway-middleware",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Stuart Whitehead",
-  "license": "MIT"
+    "name": "headway-middleware",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Stuart Whitehead",
+    "license": "MIT",
+    "dependencies": {
+        "apollo-server": "2.9.9",
+        "graphql": "14.5.8",
+        "http-status-codes": "^1.4.0",
+        "nconf": "^0.10.0",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.5",
+        "winston": "^3.2.1"
+    },
+    "devDependencies": {
+        "@types/nconf": "0.10.0",
+        "@types/node": "12.12.8",
+        "@types/request-promise": "4.1.45",
+        "@typescript-eslint/eslint-plugin": "^2.9.0",
+        "@typescript-eslint/parser": "^2.9.0",
+        "eslint": "^6.7.1",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-config-prettier": "^6.7.0",
+        "eslint-plugin-import": "^2.18.2",
+        "nodemon": "1.19.4",
+        "prettier": "^1.19.1",
+        "ts-jest": "24.1.0",
+        "ts-node": "8.5.2",
+        "typescript": "3.7.2"
+    }
 }
