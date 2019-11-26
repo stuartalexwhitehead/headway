@@ -17,21 +17,34 @@ else
     # Fail on first line that fails.
     set -e
 
+    if ! type docker &> /dev/null ; then
+        printf "\`docker\` is missing. Please install Docker to enable linting."
+        exit 1
+    fi
+
     echo "Checking core files..."
     echo
 
     CORE_FILES=$(git --no-pager diff --name-only --cached --diff-filter=d -- core/*.py core/**/*.py)
 
     if [ -n "$CORE_FILES" ] ; then
-        if type docker &> /dev/null ; then
-            docker build -t headway-core ./core >/dev/null 2>&1
-            docker run --rm --workdir / --volume $(pwd)/core:/core headway-core black ${CORE_FILES}
-            git add $CORE_FILES
-            docker run --rm --workdir / --volume $(pwd)/core:/core headway-core flake8 ${CORE_FILES}
-        else
-            printf "\`docker\` is missing. Please install Docker to enable Python linting."
-            exit 1
-        fi
+        docker build -t headway-core ./core >/dev/null 2>&1
+        docker run --rm --workdir / --volume $(pwd)/core:/core headway-core black ${CORE_FILES}
+        git add $CORE_FILES
+        docker run --rm --workdir / --volume $(pwd)/core:/core headway-core flake8 ${CORE_FILES}
+    fi
+
+    echo "Checking middleware files..."
+    echo
+
+    MIDDLEWARE_FILES_RELATIVE=$(git --no-pager diff --name-only --cached --diff-filter=d --relative=middleware -- middleware/**/*.ts)
+    MIDDLEWARE_FILES=$(git --no-pager diff --name-only --cached --diff-filter=d -- middleware/**/*.ts)
+
+    if [ -n "$MIDDLEWARE_FILES" ] ; then
+        docker build -t headway-middleware ./middleware >/dev/null 2>&1
+        docker run --rm --volume $(pwd)/middleware:/app headway-middleware yarn prettier --write ${MIDDLEWARE_FILES_RELATIVE}
+        git add $MIDDLEWARE_FILES
+        docker run --rm --volume $(pwd)/middleware:/app headway-middleware yarn eslint ${MIDDLEWARE_FILES_RELATIVE}
     fi
 
     exit 0
