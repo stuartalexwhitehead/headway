@@ -5,7 +5,7 @@
     "author": "Stuart Whitehead",
     "license": "MIT",
     "dependencies": {
-        "apollo-server": "2.9.9",
+        "apollo-server": "2.25.3",
         "graphql": "14.5.8",
         "http-status-codes": "^1.4.0",
         "nconf": "^0.10.0",
